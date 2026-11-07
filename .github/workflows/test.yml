@@ -1,0 +1,36 @@
+# Runs the mocked-bus tests against the published TLA20xx driver, and checks the driver
+# and examples compile for MicroPython. No hardware involved.
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install protocentral-tla20xx
+      - run: python tests/test_easyemg.py
+
+  micropython-compile:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install mpy-cross
+      - run: |
+          for f in protocentral_easyemg.py examples/*.py; do
+            python -m mpy_cross -o /tmp/out.mpy "$f"
+          done

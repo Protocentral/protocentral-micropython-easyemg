@@ -1,0 +1,31 @@
+# PyPI packaging for Raspberry Pi / Linux (CPython). MicroPython boards install
+# via mip (package.json), which also pulls the protocentral-tla20xx dependency.
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "protocentral-easyemg"
+version = "0.2.0"
+description = "MicroPython + Raspberry Pi driver for the Protocentral easyEMG surface EMG breakout (TLA2024-based)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Protocentral Electronics", email = "info@protocentral.com" }]
+keywords = ["easyemg", "emg", "semg", "tla2024", "i2c", "qwiic", "raspberry-pi", "micropython", "protocentral"]
+# Depends on the TLA20xx driver (which bundles the smbus2 Pi shim, Linux-gated).
+dependencies = ["protocentral-tla20xx>=1.0"]
+
+[project.urls]
+Homepage = "https://protocentral.com"
+Source = "https://github.com/Protocentral/protocentral-micropython-easyemg"
+
+[tool.hatch.build.targets.wheel]
+include = ["protocentral_easyemg.py"]
+
+[tool.hatch.build.targets.sdist]
+include = ["protocentral_easyemg.py", "examples", "tests", "README.md", "CHANGELOG.md", "LICENSE.md"]
+
+[tool.ruff]
+line-length = 100
